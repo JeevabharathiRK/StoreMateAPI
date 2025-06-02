@@ -3,7 +3,6 @@ import com.jeeva.storemateapi.model.CustomerOrders;
 import com.jeeva.storemateapi.repository.CustomerOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Iterable;
 
 @Service
 public class CustomerOrderServiceImpl implements CustomerOrderService{
@@ -22,7 +21,7 @@ public class CustomerOrderServiceImpl implements CustomerOrderService{
     }
 
     @Override
-    public CustomerOrders getCustomerOrderById(Long id) {
+    public CustomerOrders getCustomerOrderById(Integer id) {
         return customerOrderRepository.findById(id).orElse(null);
     }
 }
