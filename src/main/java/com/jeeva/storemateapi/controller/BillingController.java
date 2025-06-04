@@ -1,19 +1,23 @@
 package com.jeeva.storemateapi.controller;
 import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.jeeva.storemateapi.service.BarcodeService;
+import com.jeeva.storemateapi.service.CustomerService;
+import com.jeeva.storemateapi.model.Barcodes;
+import com.jeeva.storemateapi.model.Products;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/billing")
 public class BillingController {
 
-    static class TestObject {
-        public String productName = "Test Product";
-        public String productDescription = "This is a test product description.";
-        public String category = "Test Category";
-        public Double price = 100.0;
-        public String barcode = "123456789";
-    }
+    @Autowired
+    private BarcodeService barcodeService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @GetMapping("")
     public String home() {
@@ -21,12 +25,16 @@ public class BillingController {
     }
 
     @GetMapping(params = "barcode")
-    public ResponseEntity<TestObject> getByBarcode(@RequestParam("barcode") Long barcode) {
-        TestObject testObject = new TestObject();
-        if (testObject.barcode == null || !testObject.barcode.equals(barcode.toString())) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(testObject);
-        }
+    public ResponseEntity<Barcodes> getByBarcode(@RequestParam("barcode") Long barcode) {
+        return barcodeService.getProductIdByBarcode(barcode)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/customers")
+    public ResponseEntity<?> getCustomerByContact(@RequestParam("customerContact") String customerContact) {
+        return customerService.getCustomerByContact(customerContact)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

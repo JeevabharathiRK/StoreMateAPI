@@ -15,6 +15,7 @@ public class Leads {
 
     private String leadName;
     private String contact;
+    private String leadFrom;
     private String email;
     private String status;
 

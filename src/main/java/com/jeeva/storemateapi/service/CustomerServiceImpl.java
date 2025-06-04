@@ -25,6 +25,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Optional<Customers> getCustomerByContact(String customerContact) {
+        return customerRepository.findByCustomerContact(customerContact);
+    }
+
+    @Override
     public Customers createCustomer(Customers customer) {
         return customerRepository.save(customer);
     }

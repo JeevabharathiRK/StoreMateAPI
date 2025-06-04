@@ -10,5 +10,4 @@ import java.util.List;
  */
 @Repository
 public interface FollowUpRepository extends JpaRepository<FollowUps, Integer> {
-    List<FollowUps> findByCustomerCustomerId(Integer customerId);
 }
