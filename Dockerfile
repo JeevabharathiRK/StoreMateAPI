@@ -3,7 +3,7 @@ FROM eclipse-temurin:24-jdk
 
 # Install Gradle globally
 RUN apt-get update && apt-get install -y wget unzip && \
-    wget https://services.gradle.org/distributions/gradle-8.7-bin.zip && \
+    wget https://services.gradle.org/distributions/gradle-8.14-bin.zip && \
     unzip gradle-8.14-bin.zip -d /opt && \
     ln -s /opt/gradle-8.14/bin/gradle /usr/bin/gradle
 
