@@ -30,7 +30,7 @@ public class BarcodeServiceImpl implements BarcodeService {
     }
 
     @Override
-    public Optional<Barcodes> getProductIdByBarcode(Long barcode) {
+    public Optional<Barcodes> getByBarcode(Long barcode) {
         return barcodeRepository.findByBarcode(barcode);
     }
 }

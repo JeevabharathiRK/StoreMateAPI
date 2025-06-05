@@ -6,12 +6,8 @@ CREATE DATABASE IF NOT EXISTS storematedb;
 USE storematedb;
 
 -- Drop tables if they exist (in correct dependency order)
-DROP TABLE IF EXISTS ReturnOrders;
 DROP TABLE IF EXISTS FollowUps;
-DROP TABLE IF EXISTS CustomerInteractions;
 DROP TABLE IF EXISTS Leads;
-DROP TABLE IF EXISTS CustomerTags;
-DROP TABLE IF EXISTS CustomerPayments;
 DROP TABLE IF EXISTS OrderItems;
 DROP TABLE IF EXISTS CustomerOrders;
 DROP TABLE IF EXISTS Customers;
@@ -26,8 +22,7 @@ CREATE TABLE Suppliers (
     SupplierName VARCHAR(255) NOT NULL,
     SupplierContact VARCHAR(255),
     SupplierAddress VARCHAR(255),
-    SupplierEmail VARCHAR(255),
-    LastStockAt DATE NULL
+    SupplierEmail VARCHAR(255)
 );
 
 -- Create the Categories table
@@ -45,6 +40,7 @@ CREATE TABLE Products (
     SupplierID INT NOT NULL,
     ProductPrice DECIMAL(10, 2) NOT NULL,
     ProductStock INT NOT NULL,
+    LastStockAt DATE NOT NULL,
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID) ON DELETE RESTRICT,
     FOREIGN KEY (SupplierID) REFERENCES Suppliers(SupplierID) ON DELETE RESTRICT
 );
@@ -82,26 +78,11 @@ CREATE TABLE CustomerOrders (
 CREATE TABLE OrderItems (
     OrderItemID INT AUTO_INCREMENT PRIMARY KEY,
     OrderID INT NOT NULL,
-    ProductID INT NOT NULL,
+    ProductID INT NULL,
     Quantity INT NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (OrderID) REFERENCES CustomerOrders(OrderID) ON DELETE CASCADE,
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID) ON DELETE RESTRICT
-);
-
--- Create the CustomerPayments table
-CREATE TABLE CustomerPayments (
-    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
-    CustomerID INT NOT NULL,
-    OrderID INT NOT NULL,
-    PaymentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    PaymentAmount DECIMAL(10, 2) NOT NULL,
-    PaymentMethod VARCHAR(50),
-    PaymentStatus VARCHAR(50) DEFAULT 'Pending',
-    EMIAmount DECIMAL(10,2),
-    EMIStartDate DATE,
-    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID) ON DELETE CASCADE,
-    FOREIGN KEY (OrderID) REFERENCES CustomerOrders(OrderID) ON DELETE CASCADE
 );
 
 -- Create the Leads table
@@ -126,10 +107,10 @@ CREATE TABLE FollowUps (
 );
 
 -- 1. Insert Suppliers
-INSERT INTO Suppliers (SupplierName, SupplierContact, SupplierAddress, SupplierEmail, LastStockAt) VALUES
-('Acme Corp', '555-123-4567', '123 Main St, Anytown, USA', 'info@acmecorp.com' , '1990-05-15'),
-('Beta Co', '555-987-6543', '456 Oak Ave, Somecity, USA', 'sales@betaco.com', '1990-05-15'),
-('Gamma Ltd', '555-246-8012', '789 Pine Ln, Othertown, USA', 'support@gammaltd.com', null);
+INSERT INTO Suppliers (SupplierName, SupplierContact, SupplierAddress, SupplierEmail ) VALUES
+('Acme Corp', '555-123-4567', '123 Main St, Anytown, USA', 'info@acmecorp.com' ),
+('Beta Co', '555-987-6543', '456 Oak Ave, Somecity, USA', 'sales@betaco.com'),
+('Gamma Ltd', '555-246-8012', '789 Pine Ln, Othertown, USA', 'support@gammaltd.com');
 
 -- 2. Insert Categories
 INSERT INTO Categories (CategoryName) VALUES
@@ -138,13 +119,13 @@ INSERT INTO Categories (CategoryName) VALUES
 ('Jewelry');
 
 -- 3. Insert Products
-INSERT INTO Products (ProductName, ProductDescription, CategoryID, SupplierID, ProductPrice, ProductStock) VALUES
-('Laptop X1000', 'High-performance laptop with 16GB RAM, 512GB SSD', 1, 1, 1200.00, 50),
-('T-Shirt Basic', 'Comfortable cotton t-shirt in various colors', 2, 2, 15.99, 100),
-('Diamond Ring', 'Elegant 1-carat diamond ring in platinum setting', 3, 3, 2500.00, 10),
-('Smartphone Z5', 'Latest smartphone with 5G, 128GB storage', 1, 1, 900.00, 30),
-('Jeans Classic Fit', 'Classic fit jeans made from durable denim', 2, 2, 49.99, 75),
-('Gold Necklace', '18K gold necklace with a delicate design', 3, 3, 1800.00, 15);
+INSERT INTO Products (ProductName, ProductDescription, CategoryID, SupplierID, ProductPrice, ProductStock , LastStockAt) VALUES
+('Laptop X1000', 'High-performance laptop with 16GB RAM, 512GB SSD', 1, 1, 1200.00, 50 , '1990-05-15'),
+('T-Shirt Basic', 'Comfortable cotton t-shirt in various colors', 2, 2, 15.99, 100, '1990-05-17'),
+('Diamond Ring', 'Elegant 1-carat diamond ring in platinum setting', 3, 3, 2500.00, 10, '1990-06-14'),
+('Smartphone Z5', 'Latest smartphone with 5G, 128GB storage', 1, 1, 900.00, 30, '1990-03-15'),
+('Jeans Classic Fit', 'Classic fit jeans made from durable denim', 2, 2, 49.99, 75, '1990-05-15'),
+('Gold Necklace', '18K gold necklace with a delicate design', 3, 3, 1800.00, 15, '1990-05-15');
 
 INSERT INTO Barcodes (Barcode , ProductID) VALUES
 (1234567890, 1),
@@ -172,12 +153,6 @@ INSERT INTO OrderItems (OrderID, ProductID, Quantity, Price) VALUES
 (2, 5, 1, 49.99), -- Jane Smith bought 1 Jeans Classic Fit
 (3, 3, 1, 2500.00); -- Robert Jones bought 1 Diamond Ring
 
--- 7. Insert Customer Payments
-INSERT INTO CustomerPayments (CustomerID, OrderID, PaymentAmount, PaymentMethod, PaymentStatus, EMIAmount, EMIStartDate) VALUES
-(1, 1, 1200.00, 'Credit Card', 'Completed', NULL, NULL),
-(2, 2, 65.98, 'Cash', 'Completed', NULL, NULL),
-(3, 3, 500.00, 'EMI', 'Pending', 200.00, '2025-01-01');  -- EMI in progress
-
 
 -- 9. Insert Leads
 INSERT INTO Leads (LeadName, Contact, LeadFrom, Email, Status) VALUES
@@ -191,6 +166,9 @@ INSERT INTO FollowUps (CustomerID, FollowUpDate, Purpose, Status) VALUES
 (2, '2025-06-02 15:00:00', 'Offer discount on clothing', 'Done'),
 (3, '2025-06-03 12:00:00', 'Finalize EMI plan', 'Pending');
 
-select * from Suppliers;
+
+select * from OrderItems;
+
+DELETE FROM Customers WHERE CustomerLastName ='R';
 
 use storematedb;

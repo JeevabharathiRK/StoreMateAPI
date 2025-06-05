@@ -3,6 +3,8 @@ package com.jeeva.storemateapi.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -26,4 +28,7 @@ public class Products {
 
     private BigDecimal productPrice;
     private Integer productStock;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastStockAt;
 }

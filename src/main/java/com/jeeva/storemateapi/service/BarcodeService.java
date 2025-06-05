@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BarcodeService {
-    Optional<Barcodes> getProductIdByBarcode(Long barcode);
+    Optional<Barcodes> getByBarcode(Long barcode);
     Barcodes createBarcode(Barcodes barcode);
     Barcodes updateBarcode(Integer id, Barcodes updatedBarcode);
     void deleteBarcode(Integer id);

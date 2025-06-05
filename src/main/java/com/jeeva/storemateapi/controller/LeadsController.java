@@ -26,4 +26,13 @@ public class LeadsController {
         List<Leads> leads = leadService.getAllLeads();
         return ResponseEntity.ok(leads);
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<Leads> createLead(@RequestBody Leads lead) {
+        if (lead.getLeadId() != null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        Leads savedLead = leadService.saveLead(lead);
+        return ResponseEntity.ok(savedLead);
+    }
 }

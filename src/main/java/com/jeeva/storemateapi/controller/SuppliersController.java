@@ -26,4 +26,14 @@ public class SuppliersController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping
+    public ResponseEntity<Suppliers> createSupplier(@RequestBody Suppliers supplier) {
+        Suppliers createdSupplier = supplierService.createSupplier(supplier);
+        if(createdSupplier != null) {
+            return ResponseEntity.status(201).body(createdSupplier);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
