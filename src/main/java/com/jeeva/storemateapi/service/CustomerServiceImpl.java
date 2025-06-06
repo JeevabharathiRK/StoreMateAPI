@@ -35,14 +35,27 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customers updateCustomer(Integer id, Customers updatedCustomer) {
-        return customerRepository.findById(id).map(existing -> {
-            existing.setCustomerFirstName(updatedCustomer.getCustomerFirstName());
-            existing.setCustomerLastName(updatedCustomer.getCustomerLastName());
-            existing.setCustomerContact(updatedCustomer.getCustomerContact());
-            existing.setCustomerEmail(updatedCustomer.getCustomerEmail());
-            existing.setCustomerAddress(updatedCustomer.getCustomerAddress());
-            existing.setCustomerDOB(updatedCustomer.getCustomerDOB());
+    public Customers updateCustomer(Customers updatedCustomer) {
+        return customerRepository.findById(updatedCustomer.getCustomerId()).map(existing -> {
+
+            if (updatedCustomer.getCustomerFirstName() != null)
+                existing.setCustomerFirstName(updatedCustomer.getCustomerFirstName());
+
+            if (updatedCustomer.getCustomerLastName() != null)
+                existing.setCustomerLastName(updatedCustomer.getCustomerLastName());
+
+            if (updatedCustomer.getCustomerContact() != null)
+                existing.setCustomerContact(updatedCustomer.getCustomerContact());
+
+            if (updatedCustomer.getCustomerEmail() != null)
+                existing.setCustomerEmail(updatedCustomer.getCustomerEmail());
+
+            if (updatedCustomer.getCustomerAddress() != null)
+                existing.setCustomerAddress(updatedCustomer.getCustomerAddress());
+
+            if (updatedCustomer.getCustomerDOB() != null)
+                existing.setCustomerDOB(updatedCustomer.getCustomerDOB());
+
             return customerRepository.save(existing);
         }).orElse(null);
     }

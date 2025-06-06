@@ -21,22 +21,20 @@ public class CustomersController {
         return customerService.getAllCustomers();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Customers> getCustomerById(@PathVariable Integer id) {
-        return customerService.getCustomerById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping
     public Customers createCustomer(@RequestBody Customers customer) {
         return customerService.createCustomer(customer);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Customers> updateCustomer(@PathVariable Integer id, @RequestBody Customers customer) {
-        Customers updated = customerService.updateCustomer(id, customer);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    
+    @PutMapping("/update")
+    public ResponseEntity<Customers> updateCustomer(@RequestBody Customers customer) {
+        Customers updatedCustomer = customerService.updateCustomer(customer);
+        if (updatedCustomer != null) {
+            return ResponseEntity.ok(updatedCustomer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -12,7 +12,6 @@ import com.jeeva.storemateapi.model.Products;
 import com.jeeva.storemateapi.model.CustomerOrders;
 import com.jeeva.storemateapi.model.OrderItems;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 /* 
 Note : This code is part of a Spring Boot application that provides
@@ -83,4 +82,15 @@ public class BillingController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PutMapping("/updateProduct")
+    public ResponseEntity<Products> updateProduct(@RequestBody Products product) {
+        Products updatedProduct = productService.updateProduct(product);
+        if (updatedProduct != null) {
+            return ResponseEntity.ok(updatedProduct);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

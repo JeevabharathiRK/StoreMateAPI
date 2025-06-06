@@ -56,6 +56,22 @@ public class StocksController {
         if (category.isPresent()) {
             return ResponseEntity.ok(category.get());
         } else {
+            Categories newCategory = new Categories();
+            newCategory.setCategoryName(name);
+            Categories savedCategory = categoryService.createCategory(newCategory);
+            if(savedCategory !=null){
+                return ResponseEntity.ok(savedCategory);
+            }
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/barcodes")
+    public ResponseEntity<Barcodes> getBarcodeByProductId(@RequestParam("productId") Integer productId) {
+        Optional<Barcodes> barcode = barcodeService.getByProductId(productId);
+        if (barcode.isPresent()) {
+            return ResponseEntity.ok(barcode.get());
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

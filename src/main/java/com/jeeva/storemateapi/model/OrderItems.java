@@ -21,6 +21,7 @@ public class OrderItems {
     @JoinColumn(name = "ProductID", referencedColumnName = "ProductID")
     private Products product;
 
+    private String something;
     private Integer quantity;
     private BigDecimal price;
 }

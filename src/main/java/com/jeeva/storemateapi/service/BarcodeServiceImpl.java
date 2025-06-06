@@ -33,4 +33,9 @@ public class BarcodeServiceImpl implements BarcodeService {
     public Optional<Barcodes> getByBarcode(Long barcode) {
         return barcodeRepository.findByBarcode(barcode);
     }
+
+    @Override
+    public Optional<Barcodes> getByProductId(Integer productId) {
+        return barcodeRepository.findByProductProductId(productId);
+    }
 }
