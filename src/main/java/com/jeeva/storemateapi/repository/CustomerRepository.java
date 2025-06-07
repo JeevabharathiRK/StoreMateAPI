@@ -4,6 +4,7 @@ import com.jeeva.storemateapi.model.Customers;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Date;
 import java.util.Optional;
 /**
  * Repository interface for managing Customers entities.
@@ -12,4 +13,5 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customers, Integer> {
     Optional<Customers> findByCustomerContact(String customerContact);
+    long countByCreatedAtBetween(Date start, Date end);
 }

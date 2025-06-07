@@ -61,7 +61,8 @@ CREATE TABLE Customers (
     CustomerContact VARCHAR(255),
     CustomerEmail VARCHAR(255) UNIQUE,
     CustomerAddress VARCHAR(255),
-    CustomerDOB DATE
+    CustomerDOB DATE,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create the CustomerOrders table

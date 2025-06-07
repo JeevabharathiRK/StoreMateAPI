@@ -1,5 +1,6 @@
 package com.jeeva.storemateapi.model;
 
+import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.*;
 import java.util.Date;
 import lombok.Data;
@@ -20,4 +21,8 @@ public class Customers {
 
     @Temporal(TemporalType.DATE)
     private Date customerDOB;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdAt;
 }
