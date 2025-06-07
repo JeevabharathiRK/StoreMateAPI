@@ -1,20 +1,20 @@
-# Use an official OpenJDK runtime as a parent image
 FROM eclipse-temurin:24-jdk
 
-# Install Gradle globally
-RUN apt-get update && apt-get install -y wget unzip && \
-    wget https://services.gradle.org/distributions/gradle-8.14-bin.zip && \
-    unzip gradle-8.14-bin.zip -d /opt && \
-    ln -s /opt/gradle-8.14/bin/gradle /usr/bin/gradle
+RUN apt-get update && apt-get install -y wget unzip
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy your entire project into the container
+ENV GRADLE_VERSION=8.14
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip \
+    && unzip gradle-${GRADLE_VERSION}-bin.zip \
+    && mv gradle-${GRADLE_VERSION} /opt/gradle \
+    && ln -s /opt/gradle/bin/gradle /usr/bin/gradle \
+    && rm gradle-${GRADLE_VERSION}-bin.zip
+
 COPY . .
 
-# Expose the port your Spring Boot app runs on
-EXPOSE 80
+RUN gradle build --no-daemon -x test
 
-# Run the jar file
-ENTRYPOINT ["gradle", "bootRun", "--no-daemon"]
+EXPOSE 8080
+
+CMD ["java", "-jar", "build/libs/storemateapi-0.0.1-SNAPSHOT.jar"]
