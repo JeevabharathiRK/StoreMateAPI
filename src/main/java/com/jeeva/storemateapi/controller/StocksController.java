@@ -95,6 +95,14 @@ public class StocksController {
         return ResponseEntity.ok(savedBarcode);
     }
 
+    @PostMapping("/edit")
+    public ResponseEntity<Barcodes> editProduct(@RequestBody Barcodes barcode){
+        Barcodes savedBarcode = barcodeService.updateBarcode(barcode);
+        if(savedBarcode == null) return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(savedBarcode);
+    }
+
+
 
 
 }

@@ -17,8 +17,8 @@ public class BarcodeServiceImpl implements BarcodeService {
         return barcodeRepository.save(barcode);
     }
     @Override
-    public Barcodes updateBarcode(Integer id, Barcodes updatedBarcode) {
-        return barcodeRepository.findById(id).map(existing -> {
+    public Barcodes updateBarcode(Barcodes updatedBarcode) {
+        return barcodeRepository.findById(updatedBarcode.getBarcodeID()).map(existing -> {
             existing.setBarcode(updatedBarcode.getBarcode());
             existing.setProduct(updatedBarcode.getProduct());
             return barcodeRepository.save(existing);
